@@ -27,25 +27,41 @@ public class Workspace extends Gmail {
         // 2. If you want to attend a meeting, you must join it at its start time and leave at end time.
         // Example: If a meeting ends at 10:00 am, you cannot attend another meeting starting at 10:00 am
 
+        calendar.sort((a, b) -> {
+            if (a.endTime.equals(b.endTime)) {
+                if (a.startTime.isBefore(b.startTime))
+                    return -1;
+                else if (a.startTime.isAfter(b.startTime))
+                    return 1;
+                else
+                    return 0;
+            } else {
+                if (a.endTime.isBefore(b.endTime))
+                    return -1;
+                else if (a.endTime.isAfter(b.endTime))
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
         int maxMeetings = 0;
-        for (Meeting meeting1 : calendar) {
-            int count = 1;
-            for (Meeting meeting2 : calendar) {
-                if (!meeting1.equals(meeting2) && !overlap(meeting1, meeting2)) {
+        for (int i = 0; i < calendar.size(); i++) {
+            int count = 0;
+            LocalTime curStart = calendar.get(i).startTime;
+            LocalTime curEnd = calendar.get(i).endTime;
+
+            for (int j = i + 1; j < calendar.size(); j++) {
+                if (calendar.get(j).endTime.isAfter(curEnd) && calendar.get(j).startTime.isAfter(curStart)) {
                     count++;
+                    curStart = calendar.get(j).startTime;
+                    curEnd = calendar.get(j).endTime;
                 }
             }
+
             maxMeetings = Math.max(maxMeetings, count);
         }
         return maxMeetings;
 
-    }
-
-    private boolean overlap(Meeting meeting1, Meeting meeting2) {
-        LocalTime start1 = meeting1.startTime;
-        LocalTime end1 = meeting1.endTime;
-        LocalTime start2 = meeting2.startTime;
-        LocalTime end2 = meeting2.endTime;
-        return (start1.isBefore(end2) && end1.isAfter(start2));
     }
 }
