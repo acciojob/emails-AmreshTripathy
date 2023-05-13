@@ -19,18 +19,13 @@ public class Gmail extends Email {
     int inboxCapacity; //maximum number of mails inbox can store
     //Inbox: Stores mails. Each mail has date (Date), sender (String), message (String). It is guaranteed that message is distinct for all mails.
     //Trash: Stores mails. Each mail has date (Date), sender (String), message (String)
-//    Map<Integer, Pair> map;
     Deque<Pair> q;
-    int i, j;
     int trashSize;
 
     public Gmail(String emailId, int inboxCapacity) {
         super(emailId);
         this.inboxCapacity = inboxCapacity;
         q = new LinkedList<>();
-//        map = new HashMap<>();
-//        i = 1;
-//        j = 1;
         trashSize = 0;
     }
 
@@ -39,14 +34,7 @@ public class Gmail extends Email {
         // It is guaranteed that:
         // 1. Each mail in the inbox is distinct.
         // 2. The mails are received in non-decreasing order. This means that the date of a new mail is greater than equal to the dates of mails received already.
-//        while (map.size() >= inboxCapacity) {
-//            if (map.containsKey(i)) {
-//                map.remove(i);
-//                trashSize++;
-//            }
-//            i++;
-//        }
-//        map.put(j++, new Pair(date, sender, message));
+
         if (q.size() == inboxCapacity) {
             q.removeFirst();
             trashSize++;
@@ -57,13 +45,7 @@ public class Gmail extends Email {
     public void deleteMail(String message) {
         // Each message is distinct
         // If the given message is found in any mail in the inbox, move the mail to trash, else do nothing
-//        for (Map.Entry<Integer, Pair> entry : map.entrySet()) {
-//            if (entry.getValue().message.equals(message)) {
-//                map.remove(entry.getKey());
-//                trashSize++;
-//                break;
-//            }
-//        }
+
         Deque<Pair> temp = new LinkedList<>();
 
         while (q.size() > 0 && !q.getFirst().message.equals(message)) {
@@ -84,12 +66,6 @@ public class Gmail extends Email {
     public String findLatestMessage() {
         // If the inbox is empty, return null
         // Else, return the message of the latest mail present in the inbox
-//        if (map.isEmpty())
-//            return null;
-//
-//        while (!map.containsKey(j - 1))
-//            j--;
-//        return map.get(j - 1).message;
 
         if (q.isEmpty())
             return null;
@@ -100,12 +76,6 @@ public class Gmail extends Email {
     public String findOldestMessage() {
         // If the inbox is empty, return null
         // Else, return the message of the oldest mail present in the inbox
-//        if (map.isEmpty())
-//            return null;
-//
-//        while (!map.containsKey(i))
-//            i++;
-//        return map.get(i).message;
 
         if (q.isEmpty())
             return null;
@@ -116,14 +86,6 @@ public class Gmail extends Email {
     public int findMailsBetweenDates(Date start, Date end) {
         //find number of mails in the inbox which are received between given dates
         //It is guaranteed that start date <= end date
-//        int count = 0;
-//
-//        for (int index : map.keySet()) {
-//            if (start.equals(map.get(index).date) || end.equals(map.get(index).date) || (start.after(map.get(index).date) && map.get(index).date.before(end)))
-//                count++;
-//        }
-//
-//        return count;
 
         int count = 0;
 
@@ -141,7 +103,6 @@ public class Gmail extends Email {
 
     public int getInboxSize() {
         // Return number of mails in inbox
-//        return map.size();
         return q.size();
     }
 
