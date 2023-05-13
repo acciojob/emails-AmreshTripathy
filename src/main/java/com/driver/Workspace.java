@@ -45,24 +45,20 @@ public class Workspace extends Gmail {
             }
         });
 
-        int maxMeetings = 0;
-        for (int i = 0; i < calendar.size(); i++) {
-            int count = 1;
-            LocalTime curEnd = calendar.get(i).endTime;
+        int count = 1;
+        LocalTime curEnd = calendar.get(0).endTime;
 
-            for (int j = i + 1; j < calendar.size(); j++) {
-                if (curEnd.equals(calendar.get(j).startTime))
-                    continue;
+        for (int j = 1; j < calendar.size(); j++) {
+            if (curEnd.equals(calendar.get(j).startTime))
+                continue;
 
-                if (calendar.get(j).startTime.isAfter(curEnd)) {
-                    count++;
-                    curEnd = calendar.get(j).endTime;
-                }
+            if (calendar.get(j).startTime.isAfter(curEnd)) {
+                count++;
+                curEnd = calendar.get(j).endTime;
             }
-
-            maxMeetings = Math.max(maxMeetings, count);
         }
-        return maxMeetings;
+
+        return count;
 
     }
 }
