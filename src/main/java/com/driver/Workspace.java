@@ -45,12 +45,13 @@ public class Workspace extends Gmail {
             }
         });
 
+        LocalTime curStart = calendar.get(0).startTime;
         LocalTime curEnd = calendar.get(0).endTime;
 
         int count = 0;
 
         for (int i = 1; i < calendar.size(); i++) {
-            if (calendar.get(i).endTime.isAfter(curEnd)) {
+            if (calendar.get(i).endTime.isAfter(curEnd) && calendar.get(i).startTime.isAfter(curStart)) {
                 count++;
                 curEnd = calendar.get(i).endTime;
             }
