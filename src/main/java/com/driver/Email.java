@@ -1,4 +1,7 @@
 package com.driver;
+/*
+ * @Amresh Tripathy
+ */
 
 public class Email {
 
@@ -39,7 +42,7 @@ public class Email {
 
         int i = 0;
 
-        while (i < arr.length && (!isUpperCasePresent || !islowercasePresent || !isDigitPresent || !isSpecialCharacterPresent)) {
+        while (i < arr.length) {
 
             if (Character.isUpperCase(arr[i]))
                 isUpperCasePresent = true;
