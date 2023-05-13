@@ -19,13 +19,13 @@ public class Gmail extends Email {
     int inboxCapacity; //maximum number of mails inbox can store
     //Inbox: Stores mails. Each mail has date (Date), sender (String), message (String). It is guaranteed that message is distinct for all mails.
     //Trash: Stores mails. Each mail has date (Date), sender (String), message (String)
-    Deque<Pair> q;
+    List<Pair> lis;
     int trashSize;
 
     public Gmail(String emailId, int inboxCapacity) {
         super(emailId);
         this.inboxCapacity = inboxCapacity;
-        q = new LinkedList<>();
+        lis = new LinkedList<>();
         trashSize = 0;
     }
 
@@ -35,52 +35,44 @@ public class Gmail extends Email {
         // 1. Each mail in the inbox is distinct.
         // 2. The mails are received in non-decreasing order. This means that the date of a new mail is greater than equal to the dates of mails received already.
 
-        if (q.size() == inboxCapacity) {
-            q.removeFirst();
+        if (lis.size() == inboxCapacity) {
+            lis.remove(0);
             trashSize++;
         }
-        q.add(new Pair(date, sender, message));
+        lis.add(new Pair(date, sender, message));
     }
 
     public void deleteMail(String message) {
         // Each message is distinct
         // If the given message is found in any mail in the inbox, move the mail to trash, else do nothing
 
-        Deque<Pair> temp = new LinkedList<>();
-
-        while (q.size() > 0 && !q.getFirst().message.equals(message)) {
-            temp.add(q.removeFirst());
+        for (int i = 0; i < lis.size(); i++) {
+            if (lis.get(i).message.equals(message)) {
+                lis.remove(i);
+                trashSize++;
+                break;
+            }
         }
-
-        if (q.size() > 0) {
-            q.removeFirst();
-            trashSize++;
-        }
-
-        while (q.size() > 0)
-            temp.add(q.removeFirst());
-
-        q = new LinkedList<>(temp);
     }
 
     public String findLatestMessage() {
         // If the inbox is empty, return null
         // Else, return the message of the latest mail present in the inbox
 
-        if (q.isEmpty())
+        if (lis.isEmpty())
             return null;
 
-        return q.getLast().message;
+        return lis.get(lis.size() - 1).message;
     }
 
     public String findOldestMessage() {
         // If the inbox is empty, return null
         // Else, return the message of the oldest mail present in the inbox
 
-        if (q.isEmpty())
+        if (lis.isEmpty())
             return null;
 
-        return q.getFirst().message;
+        return lis.get(0).message;
     }
 
     public int findMailsBetweenDates(Date start, Date end) {
@@ -89,21 +81,17 @@ public class Gmail extends Email {
 
         int count = 0;
 
-        Deque<Pair> temp = new LinkedList<>();
-
-        while (q.size() > 0) {
-            if (start.equals(q.getFirst().date) || end.equals(q.getFirst().date) || (start.after(q.getFirst().date) && q.getFirst().date.before(end)))
+        for (Pair li : lis) {
+            if (start.equals(li.date) || end.equals(li.date) || (start.after(li.date) && li.date.before(end)))
                 count++;
-            temp.add(q.removeFirst());
         }
 
-        q = new LinkedList<>(temp);
         return count;
     }
 
     public int getInboxSize() {
         // Return number of mails in inbox
-        return q.size();
+        return lis.size();
     }
 
 
