@@ -48,10 +48,12 @@ public class Workspace extends Gmail {
         int maxMeetings = 0;
         for (int i = 0; i < calendar.size(); i++) {
             int count = 1;
-            LocalTime curStart = calendar.get(i).startTime;
             LocalTime curEnd = calendar.get(i).endTime;
 
             for (int j = i + 1; j < calendar.size(); j++) {
+                if (curEnd.equals(calendar.get(j).startTime))
+                    continue;
+
                 if (calendar.get(j).startTime.isAfter(curEnd)) {
                     count++;
                     curEnd = calendar.get(j).endTime;
