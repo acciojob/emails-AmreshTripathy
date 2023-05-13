@@ -82,8 +82,11 @@ public class Gmail extends Email {
         int count = 0;
 
         for (Pair li : lis) {
-            if (start.equals(li.date) || end.equals(li.date) || (start.after(li.date) && li.date.before(end)))
+//            if (start.equals(li.date) || end.equals(li.date) || (start.after(li.date) && li.date.before(end)))
+//                count++;
+            if(li.date.compareTo(start)>=0 && li.date.compareTo(end)<=0){
                 count++;
+            }
         }
 
         return count;
