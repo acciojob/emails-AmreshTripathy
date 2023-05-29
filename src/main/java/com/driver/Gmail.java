@@ -65,6 +65,7 @@ public class Gmail extends Email {
         if (lis.isEmpty())
             return null;
 
+
         return lis.get(lis.size() - 1).message;
     }
 
